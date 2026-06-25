@@ -1,0 +1,21 @@
+# env files - never commit secrets
+.env
+backend/.env
+frontend/.env
+
+# dependencies
+node_modules/
+vendor/
+venv/
+
+# build output
+frontend/dist/
+backend/public/storage/
+
+# system files
+.DS_Store
+*.log
+
+# python cache
+__pycache__/
+*.pyc
