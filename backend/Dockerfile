@@ -4,6 +4,8 @@ RUN apt-get update && apt-get install -y \
     git curl zip unzip libsqlite3-dev \
     && docker-php-ext-install pdo pdo_sqlite \
     && a2enmod rewrite \
+    && a2dismod mpm_event \
+    && a2enmod mpm_prefork \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /var/www/html
