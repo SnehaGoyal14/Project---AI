@@ -60,6 +60,7 @@ class CardController extends Controller {
     }
 
     public function assignMember(Card $card, Member $member) {
+        \Illuminate\Support\Facades\Mail::to($member->email)->send(new \App\Mail\CardAssigned($card->title, $member->name, $member->email));
         $card->members()->syncWithoutDetaching([$member->id]);
         return $card->load('members');
     }
