@@ -57,4 +57,4 @@ openclaw gateway
 ```
 
 ## Video Demo
-🎥 Coming soon
+🎥 https://www.loom.com/share/0a9458bcf2b4449aafdb8bf1c03ccb12
