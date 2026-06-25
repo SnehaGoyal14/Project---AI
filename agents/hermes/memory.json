@@ -1,0 +1,19 @@
+{
+  "facts": [
+    {
+      "text": "remember our repo is Project-AI on GitHub, default branch is main",
+      "saved_at": "2026-06-25T19:29:40.700465"
+    },
+    {
+      "text": "what do you remember",
+      "saved_at": "2026-06-25T19:30:18.449712"
+    }
+  ],
+  "plans": [
+    {
+      "goal": "plan build a Kanban board with Laravel backend and React frontend",
+      "plan": "As Hermes, the AI planning agent, I recall the following key points:\n\n1. **Project Overview**: We aim to build a Kanban board application.\n2. **Technology Stack**:\n\t* **Backend**: Laravel (PHP framework) will be used for the server-side logic.\n\t* **Frontend**: React (JavaScript library) will be used for the client-side logic and user interface.\n3. **Version Control**: Our code repository is hosted on **GitHub** under the name **Project-AI**.\n4. **Default Branch**: The default branch for our repository is **main**, which will serve as the primary branch for our project.\n\nTo break down the goal into concrete steps for a coding agent, here's a step-by-step plan:\n\n**Step 1: Set up the Repository and Branches**\n\n1. Clone the **Project-AI** repository from GitHub to the local machine using `git clone https://github.com/your-username/Project-AI.git`.\n2. Checkout the **main** branch using `git checkout main`.\n3. Create a new branch for feature development, e.g., **feature/kanban-board**, using `git checkout -b feature/kanban-board`.\n\n**Step 2: Initialize the Laravel Backend**\n\n1. Create a new Laravel project using `composer create-project --prefer-dist laravel/laravel backend` (assuming the backend will be in a directory named **backend**).\n2. Configure the Laravel project by updating the **.env** file with the necessary settings (e.g., database connections).\n3. Initialize the database using `php artisan migrate`.\n\n**Step 3: Initialize the React Frontend**\n\n1. Create a new React project using `npx create-react-app frontend` (assuming the frontend will be in a directory named **frontend**).\n2. Configure the React project by updating the **package.json** file with the necessary dependencies.\n3. Start the React development server using `npm start`.\n\n**Step 4: Set up API Endpoints and Database Schema**\n\n1. Define the database schema for the Kanban board application using Laravel's migrations.\n2. Create API endpoints for the Kanban board application using Laravel's routing system.\n3. Implement API endpoint logic using Laravel's controllers.\n\n**Step 5: Implement React Components and API Integration**\n\n1. Create React components for the Kanban board application (e.g., boards, lists, cards).\n2. Integrate the React components with the Laravel API endpoints using Axios or the Fetch API.\n3. Implement user interface logic and event handling using React's hooks and state management.\n\n**Step 6: Test and Deploy the Application**\n\n1. Write unit tests and integration tests for the Laravel backend and React frontend.\n2. Deploy the application to a production environment (e.g., Heroku, AWS).\n3. Configure continuous integration and continuous deployment (CI/CD) pipelines using GitHub Actions or other tools.\n\nThese steps provide a high-level overview of the process. As the project progresses, more detailed tasks and sub-steps will be necessary to complete each step.",
+      "saved_at": "2026-06-25T19:35:15.126694"
+    }
+  ]
+}
