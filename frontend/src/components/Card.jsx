@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Draggable } from '@hello-pangea/dnd'
 import dayjs from 'dayjs'
 import api from '../api'
@@ -8,8 +8,20 @@ export default function Card({ card, index, onUpdate }) {
   const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState(card.title)
   const [description, setDescription] = useState(card.description || '')
+  const [comments, setComments] = useState([])
+  const [newComment, setNewComment] = useState('')
+  const [author, setAuthor] = useState('')
 
   const isOverdue = card.due_date && dayjs(card.due_date).isBefore(dayjs())
+
+  useEffect(() => {
+    if (expanded) fetchComments()
+  }, [expanded])
+
+  const fetchComments = async () => {
+    const res = await api.get(`/cards/${card.id}/comments`)
+    setComments(res.data)
+  }
 
   const saveEdit = async () => {
     await api.put(`/cards/${card.id}`, { title, description })
@@ -21,6 +33,14 @@ export default function Card({ card, index, onUpdate }) {
     if (!confirm('Delete this card?')) return
     await api.delete(`/cards/${card.id}`)
     onUpdate()
+  }
+
+  const addComment = async (e) => {
+    e.preventDefault()
+    if (!newComment.trim() || !author.trim()) return
+    await api.post(`/cards/${card.id}/comments`, { author, body: newComment })
+    setNewComment('')
+    fetchComments()
   }
 
   return (
@@ -45,6 +65,9 @@ export default function Card({ card, index, onUpdate }) {
           ) : (
             <>
               <div className="card-title">{card.title}</div>
+              {card.description && expanded && (
+                <div className="card-desc">{card.description}</div>
+              )}
               {card.tags && card.tags.length > 0 && (
                 <div className="card-tags">
                   {card.tags.map(tag => (
@@ -66,9 +89,33 @@ export default function Card({ card, index, onUpdate }) {
                 </div>
               )}
               {expanded && (
-                <div className="card-actions" onClick={e => e.stopPropagation()}>
-                  <button onClick={() => setEditing(true)}>✏️ Edit</button>
-                  <button onClick={deleteCard}>🗑️ Delete</button>
+                <div onClick={e => e.stopPropagation()}>
+                  <div className="card-actions">
+                    <button onClick={() => setEditing(true)}>✏️ Edit</button>
+                    <button onClick={deleteCard}>🗑️ Delete</button>
+                  </div>
+                  <div className="comments-section">
+                    <h4>💬 Comments ({comments.length})</h4>
+                    {comments.map(c => (
+                      <div key={c.id} className="comment">
+                        <strong>{c.author}</strong>: {c.body}
+                        <span className="comment-time"> · {dayjs(c.created_at).format('MMM D HH:mm')}</span>
+                      </div>
+                    ))}
+                    <form onSubmit={addComment} className="comment-form">
+                      <input
+                        value={author}
+                        onChange={e => setAuthor(e.target.value)}
+                        placeholder="Your name..."
+                      />
+                      <input
+                        value={newComment}
+                        onChange={e => setNewComment(e.target.value)}
+                        placeholder="Add a comment..."
+                      />
+                      <button type="submit">Post</button>
+                    </form>
+                  </div>
                 </div>
               )}
             </>
