@@ -1,26 +1,18 @@
-FROM php:8.4-apache
+FROM webdevops/php-apache:8.4
 
-RUN apt-get update && apt-get install -y \
-    git curl zip unzip libsqlite3-dev \
-    && docker-php-ext-install pdo pdo_sqlite \
-    && a2enmod rewrite \
-    && a2dismod mpm_event \
-    && a2enmod mpm_prefork \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+ENV WEB_DOCUMENT_ROOT=/app/public
+ENV PHP_DISPLAY_ERRORS=0
 
-WORKDIR /var/www/html
+WORKDIR /app
 COPY . .
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install --no-dev --optimize-autoloader
 RUN cp .env.example .env
 RUN php artisan key:generate
-RUN mkdir -p /var/www/html/database
-RUN touch /var/www/html/database/database.sqlite
-RUN sed -i 's|DB_DATABASE=.*|DB_DATABASE=/var/www/html/database/database.sqlite|g' .env
+RUN mkdir -p database && touch database/database.sqlite
+RUN sed -i 's|DB_DATABASE=.*|DB_DATABASE=/app/database/database.sqlite|g' .env
 RUN php artisan migrate --force
-RUN chown -R www-data:www-data storage bootstrap/cache database
-
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -i 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
+RUN chown -R application:application storage bootstrap/cache database
 
 EXPOSE 80
