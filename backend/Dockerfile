@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:8.3-cli
 
 RUN apt-get update && apt-get install -y \
     git curl zip unzip libsqlite3-dev \
@@ -9,9 +9,8 @@ WORKDIR /app
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
-RUN cp .env.example .env || true
-RUN php artisan key:generate
 RUN touch database/database.sqlite
+RUN php artisan key:generate
 RUN php artisan migrate --force
 
 EXPOSE 8000
