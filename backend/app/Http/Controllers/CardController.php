@@ -4,7 +4,9 @@ use App\Models\BoardList;
 use App\Models\Card;
 use App\Models\Tag;
 use App\Models\Member;
+use App\Mail\CardAssigned;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CardController extends Controller {
     public function index(BoardList $list) {
@@ -60,8 +62,12 @@ class CardController extends Controller {
     }
 
     public function assignMember(Card $card, Member $member) {
-        \Illuminate\Support\Facades\Mail::to($member->email)->send(new \App\Mail\CardAssigned($card->title, $member->name, $member->email));
         $card->members()->syncWithoutDetaching([$member->id]);
+        try {
+            Mail::to($member->email)->send(new CardAssigned($card->title, $member->name, $member->email));
+        } catch (\Exception $e) {
+            \Log::error('Mail failed: ' . $e->getMessage());
+        }
         return $card->load('members');
     }
 
