@@ -19,3 +19,4 @@ backend/public/storage/
 # python cache
 __pycache__/
 *.pyc
+node_modules/
