@@ -11,14 +11,12 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 RUN cp .env.example .env
-RUN touch database/database.sqlite
 RUN php artisan key:generate
+RUN mkdir -p database && touch database/database.sqlite
 RUN php artisan migrate --force
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chown -R www-data:www-data storage bootstrap/cache database
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-
 RUN sed -i 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
-RUN sed -i 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 EXPOSE 80
