@@ -20,3 +20,4 @@ backend/public/storage/
 __pycache__/
 *.pyc
 node_modules/
+.env
